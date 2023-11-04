@@ -15,7 +15,7 @@ export default function CreateNewLesson({ open, setOpen }) {
         <textarea
           value={promptText}
           onChange={(e) => setPromptText(e.target.value)}
-          className="h-96 w-full m-3 border-2 border-gray-300 rounded-md resize-none px-2 py-2"
+          className="h-96 w-full m-3 border bg-slate-50 border-gray-300 rounded-md resize-none px-2 py-2"
         ></textarea>
         <button
           onClick={submit}
