@@ -51,7 +51,6 @@ import mapValues from "lodash.mapvalues";
 import mergeWith from "lodash.mergewith";
 import isArray from "lodash.isarray";
 import debounce from "lodash.debounce";
-import dayjs from "dayjs";
 
 const {
   useCollection: useCollectionHook,
@@ -121,33 +120,7 @@ async function storeUser({ user, db, userDataKey }) {
     defaultUpdated = true;
   }
 
-  if (!storedUserData.settings) {
-    let wake = dayjs().hour(6).minute(0).second(0).millisecond(0);
-    let sleep = dayjs().hour(22).minute(0).second(0).millisecond(0);
-
-    let defaultSettings = {
-      theme: "light",
-      notifications: "true",
-      showToolTips: "true",
-      showPopups: "true",
-      generation: {
-        freeTimeMethod: "spread",
-        freeTimeProportions: [1, 1, 1],
-        wake: wake.toDate(),
-        sleep: sleep.toDate(),
-      },
-    };
-
-    userData.settings = defaultSettings;
-    defaultUpdated = true;
-  }
-
   // Get the current timezone offset. Update if different than stored value
-  const utcOffset = dayjs().utcOffset();
-
-  if (!storedUserData?.utcOffset || storedUserData.utcOffset != utcOffset) {
-    userData.utcOffset = utcOffset;
-  }
 
   //don't overwrite with provider data if it's been changed
   if (
