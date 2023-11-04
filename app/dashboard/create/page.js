@@ -12,7 +12,7 @@ export default function Page() {
 
   return (
     <>
-      <div className="grid grid-cols-2 gap-14 h-1/2 mt-6">
+      <div className="grid grid-cols-2 gap-14 h-1/2 mt-12">
         <CreateNewLesson
           open={createNewLessonOpen}
           setOpen={setCreateNewRoadmapOpen}
