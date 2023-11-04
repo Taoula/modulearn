@@ -1,12 +1,12 @@
 "use client";
 
-import { Fragment } from "react";
+import { Fragment, Suspense } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useAuth } from "../hooks/useFirebase";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
-
+import Loading from "./loading";
 export default function DashboardLayout({ children }) {
   const { user } = useAuth();
   const { signOut } = useAuth();
@@ -240,7 +240,9 @@ export default function DashboardLayout({ children }) {
             </div>
           </header>
           <main>
-            <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">{children}</div>
+            <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
+              <Suspense fallback={<Loading />}>{children}</Suspense>
+            </div>
           </main>
         </div>
       </div>
