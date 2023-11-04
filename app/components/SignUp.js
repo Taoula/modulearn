@@ -10,7 +10,7 @@ export default function SignUp() {
 
   const signIn = function () {
     signInWithPopup().then(() => {
-      router.push("/dashboard");
+      router.push("/dashboard/create");
     });
   };
   return (
