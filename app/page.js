@@ -6,7 +6,11 @@ import SignUp from "./components/SignUp";
 export default function Home() {
   return (
     <>
-      <SignUp />
+      <div className="flex items-center h-screen">
+        <div className="mx-auto">
+          <SignUp />
+        </div>
+      </div>
     </>
   );
 }
