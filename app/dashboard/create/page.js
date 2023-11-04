@@ -12,33 +12,16 @@ export default function Page() {
 
   return (
     <>
-      <PlusCircleIcon
-        className="h-5 w-5"
-        onClick={() => setCreatePanelOpen((prev) => !prev)}
-      />
-      {createPanelOpen && (
-        <div>
-          <button onClick={() => setCreateNewLessonOpen(true)}>
-            New Lesson
-          </button>
-          <button onClick={() => setCreateNewRoadmapOpen(true)}>
-            New Roadmap
-          </button>
-        </div>
-      )}
-
-      {createNewLessonOpen && (
+      <div className="grid grid-cols-2 gap-14 h-1/2 mt-6">
         <CreateNewLesson
           open={createNewLessonOpen}
           setOpen={setCreateNewRoadmapOpen}
         />
-      )}
-      {createNewRoadmapOpen && (
         <CreateNewRoadmap
           open={createNewRoadmapOpen}
           setOpen={setCreateNewRoadmapOpen}
         />
-      )}
+      </div>
     </>
   );
 }
