@@ -19,7 +19,7 @@ export default function CreateNewLesson({ open, setOpen }) {
         ></textarea>
         <button
           onClick={submit}
-          className="w-full py-2 px-4 bg-blue-400 text-white rounded-lg hover:bg-blue-500 duration-150"
+          className="w-full py-2 px-4 bg-green-600 text-white rounded-md hover:bg-green-700 duration-150"
         >
           Create
         </button>
