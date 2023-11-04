@@ -1,11 +1,13 @@
 "use client";
 import Image from "next/image";
-import dots from "public/three-dots.svg";
+import circles from "public/spinning-circles.svg";
 
 export default function Loading() {
   return (
     <>
-      <Image src={dots} />
+      <div className="w-full flex h-screen items-center">
+        <Image src={circles} className="mx-auto" />
+      </div>
     </>
   );
 }
