@@ -39,14 +39,18 @@ export default function Page() {
         </div>
       )}
 
-      <CreateNewLesson
-        open={createNewLessonOpen}
-        setOpen={setCreateNewLessonOpen}
-      />
-      <CreateNewRoadmap
-        open={createNewRoadmapOpen}
-        setOpen={setCreateNewRoadmapOpen}
-      />
+      {createNewLessonOpen && (
+        <CreateNewLesson
+          open={createNewLessonOpen}
+          setOpen={setCreateNewRoadmapOpen}
+        />
+      )}
+      {createNewRoadmapOpen && (
+        <CreateNewRoadmap
+          open={createNewRoadmapOpen}
+          setOpen={setCreateNewRoadmapOpen}
+        />
+      )}
     </>
   );
 }
