@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function CreateNewLesson({ open, setOpen }) {
+export default function CreateNewLesson() {
   const submit = function () {};
   const [promptText, setPromptText] = useState("");
 

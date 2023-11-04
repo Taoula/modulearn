@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function CreateNewRoadmap({ open, setOpen }) {
+export default function CreateNewRoadmap() {
   const [promptText, setPromptText] = useState("");
   const submit = function () {};
   return (
