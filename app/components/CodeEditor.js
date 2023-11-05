@@ -9,10 +9,20 @@ const CodeEditor = () => {
 greet('John'); // This should return "Hello, John!"
 `
   );
-  const [output, setOutput] = useState(" "); // Initialize an empty output
+  const [output, setOutput] = useState("Code Output: (Nothing Yet)"); // Initialize an empty output
 
   const handleEditorChange = (newCode) => {
     setCode(newCode);
+  };
+
+  const [color, setColor] = useState("vs-dark");
+
+  const changeColor = () => {
+    if (color === "vs-dark") {
+      setColor("vs-light");
+    } else {
+      setColor("vs-dark");
+    }
   };
 
   const handleRunCode = () => {
@@ -25,18 +35,25 @@ greet('John'); // This should return "Hello, John!"
   };
 
   return (
-    <div>
+    <div className="">
+      <button
+        onClick={changeColor}
+        className="bg-gray-300 px-2 text-gray-400 hover:bg-gray-500 hover:text-white"
+        type="button"
+      >
+        Change Theme
+      </button>
       <MonacoEditor
-        width="800"
+        width="1000"
         height="400"
         language="javascript"
-        theme="vs-dark"
+        theme={color}
         value={code}
         onChange={handleEditorChange}
       />
-      <div className="pt-10">
+      <div className="">
         <button
-          className="bg-green-500 text-white hover:bg-green-600 px-2 py-2 rounded-md"
+          className="bg-green-500 text-white hover:bg-green-600 px-2 py-2"
           onClick={handleRunCode}
         >
           Run Code

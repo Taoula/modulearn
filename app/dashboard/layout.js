@@ -40,6 +40,11 @@ export default function DashboardLayout({ children }) {
       href: "/dashboard/explore",
       current: pathName === "/dashboard/explore",
     },
+    {
+      name: "Learn to Code",
+      href: "/dashboard/ide",
+      current: pathName === "/dashboard/ide",
+    },
   ];
 
   const userNavigation = [{ name: "Sign out" }];

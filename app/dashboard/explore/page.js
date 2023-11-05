@@ -14,6 +14,7 @@ function ExplorePage() {
   return (
     <div className="mt-12">
       <div>
+        <CodeEditor />
         <InstantSearch searchClient={searchClient} indexName="ModulearnTitles">
           <SearchBox
             placeholder="Learn something new..."
