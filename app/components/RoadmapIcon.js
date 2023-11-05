@@ -94,7 +94,7 @@ export default function RoadmapIcon({ lesson, index, data, updateRoadmap }) {
                 : !lesson?.id
                 ? "bg-gray-100"
                 : complete
-                ? "bg-blue-50"
+                ? "bg-blue-600" // Changed this from "bg-blue-50" to "bg-blue-600" for better contrast with the checkmark
                 : "bg-green-600"
             }`}
           >
@@ -103,7 +103,7 @@ export default function RoadmapIcon({ lesson, index, data, updateRoadmap }) {
             ) : (
               <svg
                 className={`w-3.5 h-3.5 lg:w-4 lg:h-4 ${
-                  !lesson?.id ? "" : complete ? "text-blue-600" : "text-white"
+                  !lesson?.id ? "" : complete ? "text-white" : "text-white"
                 }`}
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
