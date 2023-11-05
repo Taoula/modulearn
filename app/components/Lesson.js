@@ -13,8 +13,14 @@ export default function Lesson({ lesson, key }) {
     <>
       {data && (
         <li key={key} className="col-span-1 flex rounded-md shadow-sm">
-          <div className="bg-green-600 flex w-16 flex-shrink-0 items-center justify-center rounded-l-md text-sm font-medium text-white">
-            P
+          <div
+            className={` flex w-16 flex-shrink-0 items-center justify-center border rounded-l-md text-sm font-medium ${
+              lesson?.completed
+                ? "bg-green-50 text-green-600 border-green-600"
+                : "bg-yellow-100 text-yellow-600 border-yellow-600"
+            }`}
+          >
+            {lesson?.completed ? "C" : "IP"}
           </div>
           <div className="flex flex-1 items-center justify-between truncate rounded-r-md border-b border-r border-t border-gray-200 bg-white">
             <div className="flex-1 truncate px-4 py-2 text-sm">
