@@ -9,9 +9,18 @@ export default function RoadmapIcon({ lesson, index, data, updateRoadmap }) {
   const { user } = useAuth();
   const { data: userData, update: updateUser } = useDoc("");
   const { add } = useCollection("/lessons", { limit: 0 });
+  const { data: lessonData, loading: lessonDataLoading } = useDoc(
+    `/lessons/${lesson?.id}`
+  );
   const router = useRouter();
   const [loading, setLoading] = useState("");
   const [complete, setComplete] = useState(null);
+
+  function openLesson() {
+    if (lesson?.id) {
+      router.push(`/dashboard/learn/?lessonId=${lesson.id}`);
+    }
+  }
 
   function isComplete() {
     if (userData?.lessons) {
@@ -30,6 +39,32 @@ export default function RoadmapIcon({ lesson, index, data, updateRoadmap }) {
   useEffect(() => {
     setComplete(() => isComplete());
   }, [userData, lesson]);
+
+  useEffect(() => {
+    if (lessonDataLoading === false && lessonData === null && !lesson?.id) {
+      generateLesson();
+    }
+  }, [lessonDataLoading]);
+
+  function getColors(type) {
+    if (type == "bg") {
+      if (!lesson?.id) {
+        return { backgroundColor: "#ebebeb" };
+      } else if (complete) {
+        return { backgroundColor: "#8affa9" };
+      } else {
+        return { backgroundColor: "#6190ff" };
+      }
+    } else {
+      if (!lesson?.id) {
+        return { color: "#a3a2a2" };
+      } else if (complete) {
+        return { color: "#43a842" };
+      } else {
+        return { color: "#1c45a6" };
+      }
+    }
+  }
 
   const generateLesson = async function () {
     if (lesson?.id) {
@@ -62,7 +97,6 @@ export default function RoadmapIcon({ lesson, index, data, updateRoadmap }) {
         let lessons = userData?.lessons || [];
         lessons.push({ id, completed: false, progress: 0 });
         await updateUser({ lessons });
-        router.push(`/dashboard/learn/?lessonId=${id}`);
       } catch (error) {
         console.error(error);
       } finally {
@@ -74,7 +108,7 @@ export default function RoadmapIcon({ lesson, index, data, updateRoadmap }) {
   return (
     <>
       <li
-        onClick={generateLesson}
+        onClick={openLesson}
         className={`relative flex w-full items-center ${
           index !== data.lessons.length - 1
             ? "after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-100 after:border-4 after:inline-block"
