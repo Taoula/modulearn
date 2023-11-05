@@ -1,9 +1,19 @@
+import { set } from "mongoose";
 import { useState } from "react";
 
 export default function CreateNewLesson() {
   const submit = function () {};
-  const [promptText, setPromptText] = useState("");
+  const [promptText, setPromptText] = useState("Teach me about");
+  const [userStartedTyping, setUserStartedTyping] = useState(false);
 
+  const handleInputChange = (e) => {
+    let text = e.target.value;
+    if (text.slice(0, 14) != "Teach me about") {
+      setPromptText("Teach me about " + text.slice(14, text.length));
+    } else {
+      setPromptText(text);
+    }
+  };
   return (
     <>
       <div className="bg-white border shadow-lg rounded-lg px-8 py-8 flex flex-col justify-center items-center gap-3">
@@ -14,7 +24,8 @@ export default function CreateNewLesson() {
         </p>
         <textarea
           value={promptText}
-          onChange={(e) => setPromptText(e.target.value)}
+          placeholder="What do you want to learn about?"
+          onChange={handleInputChange}
           className="h-96 w-full m-3 border bg-slate-50 border-gray-300 rounded-md resize-none px-2 py-2"
         ></textarea>
         <button
