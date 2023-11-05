@@ -31,26 +31,6 @@ export default function RoadmapIcon({ lesson, index, data, updateRoadmap }) {
     setComplete(() => isComplete());
   }, [userData, lesson]);
 
-  function getColors(type) {
-    if (type == "bg") {
-      if (!lesson?.id) {
-        return { backgroundColor: "#ebebeb" };
-      } else if (complete) {
-        return { backgroundColor: "#8affa9" };
-      } else {
-        return { backgroundColor: "#6190ff" };
-      }
-    } else {
-      if (!lesson?.id) {
-        return { color: "#a3a2a2" };
-      } else if (complete) {
-        return { color: "#43a842" };
-      } else {
-        return { color: "#1c45a6" };
-      }
-    }
-  }
-
   const generateLesson = async function () {
     if (lesson?.id) {
       router.push(`/dashboard/learn/?lessonId=${lesson.id}`);
@@ -108,44 +88,102 @@ export default function RoadmapIcon({ lesson, index, data, updateRoadmap }) {
           </div>
 
           <span
-            // style={...getColors("bg")}
             className={`hover:scale-110 duration-200 hover:cursor-pointer flex items-center justify-center w-10 h-10 rounded-full lg:h-10 lg:w-10 shrink-0 group ${
-              !lesson?.id
+              loading
+                ? "bg-yellow-400 animate-pulse"
+                : !lesson?.id
                 ? "bg-gray-100"
                 : complete
                 ? "bg-blue-50"
                 : "bg-green-600"
             }`}
           >
-            <svg
-              // style={...getColors("color")}
-              className={`w-3.5 h-3.5  lg:w-4 lg:h-4 ${
-                !lesson?.id ? "" : complete ? "text-blue-600" : "text-white"
-              }`}
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 16 12"
-            >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M1 5.917 5.724 10.5 15 1.5"
-              />
-            </svg>
+            {loading ? (
+              <Image src={circles} alt="Loading..." className="h-1 w-auto" />
+            ) : (
+              <svg
+                className={`w-3.5 h-3.5 lg:w-4 lg:h-4 ${
+                  !lesson?.id ? "" : complete ? "text-blue-600" : "text-white"
+                }`}
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 16 12"
+              >
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M1 5.917 5.724 10.5 15 1.5"
+                />
+              </svg>
+            )}
           </span>
         </div>
-        {loading && (
-          <div className="flex text-black">
-            <span className="mx-auto flex items-center gap-2">
-              <p>Loading</p>
-              <Image src={circles} className="h-5 w-5" />
-            </span>
-          </div>
-        )}
       </li>
+
+      <style jsx>{`
+        @keyframes pulse {
+          0% {
+            opacity: 0.5;
+          }
+          50% {
+            opacity: 1;
+          }
+          100% {
+            opacity: 0.5;
+          }
+        }
+        .animate-pulse {
+          animation: pulse 2s infinite;
+        }
+      `}</style>
     </>
+    // <>
+    //   <li
+    //     onClick={generateLesson}
+    //     className={`relative flex w-full items-center ${
+    //       index !== data.lessons.length - 1
+    //         ? "after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-100 after:border-4 after:inline-block"
+    //         : ""
+    //     }`}
+    //   >
+    //     {/* Tooltip */}
+    //     <div className="group">
+    //       <div className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition duration-200 pointer-events-none p-2 w-36 rounded-md shadow-lg bg-white border border-gray-200 text-sm">
+    //         {lesson?.title}
+    //       </div>
+
+    //       <span
+    //         className={`hover:scale-110 duration-200 hover:cursor-pointer flex items-center justify-center w-10 h-10 rounded-full lg:h-10 lg:w-10 shrink-0 group ${
+    //           !lesson?.id
+    //             ? "bg-gray-100"
+    //             : complete
+    //             ? "bg-blue-50"
+    //             : "bg-green-600"
+    //         }`}
+    //       >
+    //         <svg
+    //           className={`w-3.5 h-3.5  lg:w-4 lg:h-4 ${
+    //             !lesson?.id ? "" : complete ? "text-blue-600" : "text-white"
+    //           }`}
+    //           aria-hidden="true"
+    //           xmlns="http://www.w3.org/2000/svg"
+    //           fill="none"
+    //           viewBox="0 0 16 12"
+    //         >
+    //           <path
+    //             stroke="currentColor"
+    //             strokeLinecap="round"
+    //             strokeLinejoin="round"
+    //             strokeWidth="2"
+    //             d="M1 5.917 5.724 10.5 15 1.5"
+    //           />
+    //         </svg>
+    //       </span>
+    //     </div>
+    //   </li>
+    // </>
   );
 }
