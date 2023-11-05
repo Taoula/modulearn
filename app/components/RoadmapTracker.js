@@ -13,7 +13,7 @@ export default function RoadmapTracker({ data }) {
             key={index}
             className={`relative flex w-full items-center ${
               index !== data.lessons.length - 1
-                ? "after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-100 after:border-4 after:inline-block hover:scale-110 duration-200"
+                ? "after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-100 after:border-4 after:inline-block"
                 : ""
             }`}
           >
@@ -23,7 +23,7 @@ export default function RoadmapTracker({ data }) {
                 {lesson?.title}
               </div>
 
-              <span className="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-full lg:h-10 lg:w-10 shrink-0">
+              <span className="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-full lg:h-10 lg:w-10 shrink-0 hover:scale-110 duration-200">
                 <svg
                   className="w-3.5 h-3.5 text-gray-500 lg:w-4 lg:h-4"
                   aria-hidden="true"
