@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import algoliasearch from "algoliasearch/lite";
 import { InstantSearch, SearchBox, Hits } from "react-instantsearch";
 import SearchResult from "@/app/components/SearchResult";
-import { QuestionMarkCircleIcon } from "@heroicons/react/20/solid";
+import CodeEditor from "@/app/components/CodeEditor";
 
 function ExplorePage() {
   const searchClient = algoliasearch(
@@ -20,10 +20,11 @@ function ExplorePage() {
             classNames={{
               root: "flex justify-center pb-10",
               form: "flex justify-center w-full ",
+              submitIcon: "w-4 h-4",
               input:
                 "flex justify-center px-3 w-4/5 shadow-sm block w-full rounded-md border-0  text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6",
               submit:
-                "flex justify-center shadow-sm block px-5 py-3 bg-green-200 rounded-md border-0  text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 hover:bg-green-500 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6",
+                "flex justify-center shadow-sm block px-5 py-3 bg-green-200 rounded-md border-0 placeholder:text-gray-400 hover:bg-green-500 text-grey-100 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6",
             }}
           />
           <Hits

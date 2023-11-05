@@ -18,12 +18,14 @@
     "lodash.isarray": "^4.0.0",
     "lodash.mapvalues": "^4.6.0",
     "lodash.mergewith": "^4.6.2",
+    "monaco-editor": "^0.44.0",
     "next": "14.0.1",
     "openai": "^4.0.0",
     "react": "^18",
     "react-dom": "^18",
     "react-firebase-hooks": "^5.1.1",
-    "react-instantsearch": "^7.3.0"
+    "react-instantsearch": "^7.3.0",
+    "react-monaco-editor": "^0.54.0"
   },
   "devDependencies": {
     "autoprefixer": "^10.0.1",
