@@ -19,8 +19,11 @@ export default function CreateNewLesson() {
       "json"
     );
 
-    const { id } = await add({ pages: response });
-    router.push(`/learn?lessonId=${id}`);
+    const title = response[0]?.title;
+    response.shift();
+
+    const { id } = await add({ title, pages: response });
+    router.push(`/dashboard/learn/?lessonId=${id}`);
   };
 
   return (
