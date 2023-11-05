@@ -2,29 +2,40 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useCollection } from "../hooks/useFirebase";
 import getGptResponse from "../functions/getGptResponse";
+import Image from "next/image";
+import circles from "public/three-dots.svg";
 
 export default function CreateNewRoadmap() {
   const { add: addRoadmap } = useCollection("roadmaps");
   const [promptText, setPromptText] = useState("");
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
   const submit = async function () {
     if (!promptText) {
       return;
     }
 
-    const response = await getGptResponse(
-      "roadmap",
-      [{ role: "user", content: promptText }],
-      "json"
-    );
+    setIsLoading(true);
 
-    const title = response?.title;
-    const lessons = response?.lessons;
+    try {
+      const response = await getGptResponse(
+        "roadmap",
+        [{ role: "user", content: promptText }],
+        "json"
+      );
 
-    const { id } = await addRoadmap({ title, lessons });
+      const title = response?.title;
+      const lessons = response?.lessons;
 
-    router.push(`/dashboard/roadmaps/?roadmapId=${id}`);
+      const { id } = await addRoadmap({ title, lessons });
+
+      router.push(`/dashboard/roadmaps/?roadmapId=${id}`);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -42,9 +53,19 @@ export default function CreateNewRoadmap() {
         ></textarea>
         <button
           onClick={submit}
+          disabled={isLoading}
           className="w-full py-2 px-4 bg-green-600 text-white rounded-md hover:bg-green-700 duration-150"
         >
-          Create
+          {isLoading ? (
+            <div className="flex">
+              <span className="mx-auto flex items-center gap-2">
+                <p>Loading</p>
+                <Image src={circles} className="h-5 w-5" />
+              </span>
+            </div>
+          ) : (
+            "Create"
+          )}
         </button>
       </div>
     </>
