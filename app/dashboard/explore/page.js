@@ -32,14 +32,14 @@ function ExplorePage() {
         <InstantSearch searchClient={searchClient} indexName="ModulearnTitles">
           <SearchBox
             resetIconComponent={() => {}}
-            placeholder="Learn something new..."
+            placeholder="Search for a roadmap topic made by other users"
             classNames={{
               root: "flex justify-center pb-10",
               form: "flex justify-center w-full ",
               input:
-                "flex justify-center px-3 w-4/5 shadow-sm block w-full rounded-md border-0  text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6",
+                "flex justify-center px-3 w-4/5 shadow-sm block w-full rounded-md border-0 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-600 sm:text-sm sm:leading-6",
               submit:
-                "flex justify-center shadow-sm block px-5 py-3 bg-green-200 rounded-md border-0  text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 hover:bg-green-500 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6",
+                "px-5 py-4 border rounded-md ml-2 bg-green-50 border-green-600 hover:bg-green-600 duration-100",
             }}
           />
           <EmptyQueryBoundary fallback={null}>
