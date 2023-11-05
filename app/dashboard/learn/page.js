@@ -116,7 +116,7 @@ export default function Page() {
           {data && (
             <>
               <div className="relative">
-                <div className="h-[40rem] overflow-scroll p-1">
+                <div className="h-[40rem] overflow-scroll p-1 hide-scrollbar">
                   <LessonPage pageData={data?.pages[index]} />
                   <div className="flex flex-col gap-3 w-full">
                     {session?.messages &&
