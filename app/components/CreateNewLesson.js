@@ -1,4 +1,3 @@
-import { set } from "mongoose";
 import { useState } from "react";
 import getGptResponse from "../functions/getGptResponse";
 import { useCollection } from "../hooks/useFirebase";
