@@ -18,7 +18,7 @@ export default function Page() {
 
   return (
     <>
-      <div className="flex flex-col items-center gap-20">
+      <div className="flex flex-col items-center gap-20 mt-12">
         <h1 className="text-3xl font-bold">{data?.title}</h1>
         <div className="flex justify-between items-center">
           {index != 0 && (
