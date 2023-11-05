@@ -1,21 +1,30 @@
 import { set } from "mongoose";
 import { useState } from "react";
 import getGptResponse from "../functions/getGptResponse";
-import { useCollection } from "../hooks/useFirebase";
+import { useAuth, useCollection, useDoc } from "../hooks/useFirebase";
 import { useRouter } from "next/navigation";
 import circles from "public/three-dots.svg";
 import Image from "next/image";
 
 export default function CreateNewLesson() {
-  const { add } = useCollection("lessons");
   const [promptText, setPromptText] = useState("Teach me about");
+
+  const { add } = useCollection("/lessons");
+
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const { user } = useAuth();
+  const { data: userData, update: updateUser } = useDoc("");
 
   const submit = async function () {
-    if (!promptText) {
+    if (!promptText || !user || !userData) {
+      console.log("something missing");
       return;
     }
+
+    console.log("everything");
+
+    const { uid } = user;
 
     setIsLoading(true);
 
@@ -29,7 +38,11 @@ export default function CreateNewLesson() {
       const title = response[0]?.title;
       response.shift();
 
-      const { id } = await add({ title, pages: response });
+      const { id } = await add({ title, pages: response, uid });
+
+      let lessons = userData?.lessons || [];
+      lessons.push({ id, completed: false, progress: 0 });
+      await updateUser({ lessons });
       router.push(`/dashboard/learn/?lessonId=${id}`);
     } catch (error) {
       console.error(error);
