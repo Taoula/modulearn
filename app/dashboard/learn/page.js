@@ -71,13 +71,7 @@ export default function Page() {
     }
   };
 
-  const [currentMessage, setCurrentMessage] = useState(""); // Current message being typed by the user
-
-  // useEffect(() => {
-  //   if (data?.pages && data?.pages.length > 0) {
-  //     setMessages([{ text: data.pages[0].pageText, source: "other" }]);
-  //   }
-  // }, [data]);
+  const [currentMessage, setCurrentMessage] = useState("");
 
   useEffect(() => {
     if (userData && data) {
@@ -99,25 +93,26 @@ export default function Page() {
       </h1>
       <div className="flex flex-col items-center gap-20 mt-12">
         <div className="flex gap-12 items-center">
-          {/* {index != 0 && ( */}
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className={`w-10 h-10 hover:stroke-green-600 hover:fill-white duration-200 ${
-              index === 0 ? "stroke-gray-200 hover:stroke-gray-200" : ""
-            }`}
+          <button
             onClick={() => setIndex((prev) => (prev > 0 ? prev - 1 : prev))}
+            className="text-gray-500 bg-white border border-gray-500 px-4 py-1 rounded-full text-md font-semibold flex items-center gap-2 hover:bg-green-600 duration-200 hover:text-white"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M11.25 9l-3 3m0 0l3 3m-3-3h7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-          {/* )} */}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18"
+              />
+            </svg>
+            <p>Back</p>
+          </button>
           {data && (
             <>
               <div className="">
@@ -128,18 +123,18 @@ export default function Page() {
                       return <Message message={message} />;
                     })}
                 </div>
-                <div className="flex gap-4 w-full">
+                <div className="flex gap-4 w-full mt-12">
                   <textarea
                     type="text"
                     value={currentMessage}
                     onChange={(e) => setCurrentMessage(e.target.value)}
-                    className="resize-none pl-2 w-11/12 block rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 disabled:cursor-not-allowed bg-gray-50 disabled:text-gray-500 disabled:ring-gray-200 sm:text-sm sm:leading-6"
+                    className="resize-none pl-2 w-10/12 block rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 disabled:cursor-not-allowed bg-gray-50 disabled:text-gray-500 disabled:ring-gray-200 sm:text-sm sm:leading-6"
                     placeholder="Have a question? Ask here..."
                   ></textarea>
                   <button
                     type="button"
                     onClick={handleSendMessage}
-                    className="rounded-md bg-green-600 text-white w-1/12 hover:bg-green-700"
+                    className="rounded-md bg-green-50 text-green-600 border border-green-600 w-2/12 hover:bg-green-600 hover:text-white duration-100"
                   >
                     Send
                   </button>
@@ -148,27 +143,61 @@ export default function Page() {
             </>
           )}
           {index != data?.pages?.length - 1 ? (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-10 h-10 hover:stroke-green-600 hover:fill-white duration-200"
+            <button
               onClick={() => setIndex((prev) => prev + 1)}
+              className="text-gray-500 bg-white border border-gray-500 px-4 py-1 rounded-full text-md font-semibold flex items-center gap-2 hover:bg-green-600 duration-200 hover:text-white"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M12.75 15l3-3m0 0l-3-3m3 3h-7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
+              <p>Next</p>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
+                />
+              </svg>
+            </button>
           ) : (
+            // <svg
+            //   xmlns="http://www.w3.org/2000/svg"
+            //   fill="none"
+            //   viewBox="0 0 24 24"
+            //   strokeWidth={1.5}
+            //   stroke="currentColor"
+            //   className="w-10 h-10 hover:stroke-green-600 hover:fill-white duration-200"
+            //
+            // >
+            //   <path
+            //     strokeLinecap="round"
+            //     strokeLinejoin="round"
+            //     d="M12.75 15l3-3m0 0l-3-3m3 3h-7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            //   />
+            // </svg>
             <button
               onClick={complete}
-              className="text-yellow-500 bg-red-600 p-5 rounded-full text-lg font-bold tracking-widest"
+              className="text-green-600 bg-green-50 border border-green-600 px-4 py-1 rounded-full text-md font-semibold flex items-center gap-2 hover:bg-green-600 duration-200 hover:text-white"
             >
-              COMPLETE LESSON
+              <p>Finish lesson</p>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
+                />
+              </svg>
             </button>
           )}
         </div>
