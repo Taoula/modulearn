@@ -1,19 +1,24 @@
 "use client";
 import React, { useState } from "react";
-import SearchBar from "app/components/SearchBar.js"; // Import the SearchBar component
+import algoliasearch from "algoliasearch/lite";
+import { InstantSearch, SearchBox, Hits } from "react-instantsearch";
+import SearchResult from "@/app/components/SearchResult";
 
 function ExplorePage() {
-  const handleSearch = (query) => {
-    // Implement your search logic here, e.g., make an API request or filter data.
-    console.log(`Search query: ${query}`);
-  };
+  const searchClient = algoliasearch(
+    "S1V0P8Z3CV",
+    "f08d6472a8fbbbe0cb8cb60a2b837d9a"
+  );
 
   return (
     <div className="mt-12">
       <div>
-        <SearchBar onSearch={handleSearch} />{" "}
-        {/* Use the SearchBar component */}
-        {/* Other content for your Explore page */}
+        <InstantSearch searchClient={searchClient} indexName="ModulearnTitles">
+          <SearchBox />
+          <Hits
+            hitComponent={({ hit }) => <SearchResult id={hit.objectID} />}
+          />
+        </InstantSearch>
       </div>
     </div>
   );

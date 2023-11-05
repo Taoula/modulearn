@@ -41,7 +41,15 @@
 //   );
 // }
 
-export default function RoadmapTracker({ data }) {
+"use client";
+
+import { useDoc } from "../hooks/useFirebase";
+
+import RoadmapIcon from "./RoadmapIcon";
+
+export default function RoadmapTracker({ roadmap }) {
+  const { data, update: updateRoadmap } = useDoc(`/roadmaps/${roadmap.id}`);
+
   return (
     <>
       <div className="rounded-md border px-6 py-8">
