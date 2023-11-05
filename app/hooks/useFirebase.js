@@ -47,6 +47,8 @@ import {
   connectFunctionsEmulator,
 } from "firebase/functions";
 
+import firebaseConfig from "../../firebaseConfig.json";
+
 import mapValues from "lodash.mapvalues";
 import mergeWith from "lodash.mergewith";
 import isArray from "lodash.isarray";
@@ -58,16 +60,6 @@ const {
   useDocumentDataOnce,
   useDocumentData,
 } = require("react-firebase-hooks/firestore");
-
-const firebaseConfig = {
-  apiKey: "AIzaSyBWbde7n67F9Pif_2itfD6ojiKCh_xAi8Y",
-  authDomain: "modulearn.firebaseapp.com",
-  projectId: "modulearn",
-  storageBucket: "modulearn.appspot.com",
-  messagingSenderId: "577122192217",
-  appId: "1:577122192217:web:333b8a99b5bee925aeda48",
-  measurementId: "G-18H6CY9C0Z",
-};
 
 const FirebaseContext = createContext();
 const FirestoreContext = createContext();

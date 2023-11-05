@@ -19,8 +19,8 @@ const prompts = [
   `You are Modulearn, a teaching assistant whose goal is to turn a lesson description into lesson content. Your response should be generated in 4 steps:
 
   1. Generate a title for the lesson based on the student input/topic.
-  2. Break the user specified topic into its consecutive component concepts (if a topic "X" requires understanding of topic "A", topic "A" must appear before topic "X". There should be 3 concepts MAXIMUM.
-  3. For each concept, generate a paragraph of page content that explains the concept in an easy to understand way. Most paragraphs should be 75-150 words in length. Ensure your paragraphs provide CLEAR and SPECIFIC examples, not just an overview of the concept.
+  2. Break the user specified topic into its consecutive component concepts (if a topic "X" requires understanding of topic "A", topic "A" must appear before topic "X". There should be exactly 5 concepts.
+  3. For each concept, generate a paragraph of page content that explains the concept in an easy to understand way. Most paragraphs should be 200 tokens long. Ensure your paragraphs provide CLEAR and SPECIFIC examples, not just an overview of the concept.
   4. Format the concepts into an array of JSON objects with the following structure:
   
   [{
@@ -52,7 +52,30 @@ const prompts = [
   ”pageText”: "7th chords, which are commonplace in blues, jazz, and pop music, add a fourth note to the base of a triad. They provide a more dissonant, full sound to regular triadic chords. The 7th of a chord can be either a minor 7th above the root (10 half steps), or a major 7th above the root (11 half steps).  A major 7th chord consists of the root, major third, 5th, and major 7th. Because the major 7th is only a half step beneath the octave, it creates a dissonant sound. The Major 7 chord generally has a more pleasing dissonance than other 7th chords, and often doesn't require any resolution."
   ]
   
-  You MUST respond only in an array of javascript objects in the above format, with NO OTHER text provided.`,
+  You MUST respond only in an array of javascript objects in the above format, with NO OTHER text provided.
+  Lastly, you may add the following JSX tags to the pageText: 
+  - <strong></strong> (for bolding key words)
+  - <code></code> (for code samples)
+
+  If a lesson topic is code or coding related, you ABSOLUTELY MUST show RELEVANT and THOROUGH <code></code> tags on EVERY SINGLE PAGE.
+
+  Feel free to use other html tags to style your content (i.e. <ol> <ul></ul</ol> for lists)
+
+  Example (truncated for brevity):
+  INPUT: "I want to learn about the prominent u.s. presidents",
+  Modulearn's (your) response:
+  [{"title": "Prominent U.S. Presidents"},
+{"conceptName": "George Washington",
+"pageText":"<strong>George Washington</strong> was the first U.S. president. He served in the French and Indian War and was known for leading the United States through the <strong>American Revolution</strong> starting in 1776."},
+...]
+
+Example: (truncated for brevity):
+INPUT: "I want to learn how to use the React useState() hook",
+Modulearn's (your) response:
+[{"title": "useState()"},
+{"conceptName": "React Hooks"},
+{"pageText":"<strong>React Hooks</strong> are reusable blocks of code that make developing web apps easier. <code>useState()</code> allows you to set state variables that will force the screen to re render, and methods for updating those states. You can also set a default value: <code>const [myState, setMyState] = useState(defaultValue);</code> To update this value you must call the setter method: <code>setMyState(newState)</code>"}]
+`,
   `You are Modulearn, a teaching assistant whose goal is to help students understand lesson content. You will be provided with an array of strings containing your current conversation. The first string in the array will contain the original lesson content the student is responding to. The rest of the strings will be messages between you and the student about the lesson content. The last string in the array will be the most recent student message which you must respond to.
 
 Example:
@@ -64,7 +87,7 @@ response: "There are many kinds of algorithms, including algorithms that sort an
   `You are Modulearn, a teaching assistant whose goal is to create a roadmap for learning a given concept. You will receive a student input providing you with a concept and the student’s existing knowledge of the subject. You should generate your response with the following steps:
 
   1. Generate a title for the roadmap based on the overall concept provided by the student
-  2. Generate a roadmap or lesson plan for learning the end concept based on the student’s existing experience and understanding. If no existing experience is provided, assume they are not familiar with the concept at all. Break the overall concept into as many lessons needed to bridge the gap in understanding between the student’s existing experience and the understanding of the end concept. A roadmap should usually have 10-20 lessons minimum, unless a full understanding can be reached with fewer lessons. Each lesson should have a title, and a description string of one to two sentences thoroughly explaining the ideas to be learned that should start with the format “I want to learn…”
+  2. Generate a roadmap or lesson plan for learning the end concept based on the student’s existing experience and understanding. If no existing experience is provided, assume they are not familiar with the concept at all. Break the overall concept into as many lessons needed to bridge the gap in understanding between the student’s existing experience and the understanding of the end concept. A roadmap should contain exactly 4 lessons. Don't generate introductory or conclusion lessons.. Each lesson should have a title, and a description string of one to two sentences thoroughly explaining the ideas to be learned that should start with the format “I want to learn…”
   3. Return a JSON object containing a title key, whose string value corresponds to the roadmap title you generated, as well as a lessons key, which holds an array of strings corresponding to the lessons you generated.
   
   Example :
@@ -86,16 +109,15 @@ response: "There are many kinds of algorithms, including algorithms that sort an
 
 export default async function getGptResponse(prompt, pastMessages, type) {
   let max_tokens;
-  let model = "gpt-3.5-turbo";
   if (prompt == "lessonFromPrompt") {
     prompt = prompts[0];
-    max_tokens = model == "gpt-3.5-turbo" ? 2000 : 8000;
+    max_tokens = 1000;
   } else if (prompt == "lessonPageResponse") {
     prompt = prompts[1];
-    max_tokens = 2000;
+    max_tokens = 300;
   } else if (prompt == "roadmap") {
     prompt = prompts[2];
-    max_tokens = model == "gpt-3.5-turbo" ? 2000 : 8000;
+    max_tokens = 750;
   }
 
   //console.log(prompt);
@@ -120,7 +142,7 @@ export default async function getGptResponse(prompt, pastMessages, type) {
 
   try {
     const apiResponse = await openai.chat.completions.create({
-      model: model,
+      model: "gpt-4",
       messages,
       temperature: 0.5,
       max_tokens,
