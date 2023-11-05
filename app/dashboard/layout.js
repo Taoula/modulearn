@@ -235,7 +235,9 @@ export default function DashboardLayout({ children }) {
                   ? "Lessons"
                   : pathName === "/dashboard/roadmaps"
                   ? "Roadmaps"
-                  : "Explore"}
+                  : pathName === "/dashboard/explore"
+                  ? "Explore"
+                  : "Learn"}
               </h1>
             </div>
           </header>

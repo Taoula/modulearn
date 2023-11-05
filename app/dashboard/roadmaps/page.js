@@ -1,3 +1,11 @@
+import RoadmapTracker from "@/app/components/RoadmapTracker";
+
 export default function Page() {
-  return <></>;
+  return (
+    <>
+      <div className="mt-12">
+        <RoadmapTracker />
+      </div>
+    </>
+  );
 }

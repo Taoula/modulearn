@@ -1,9 +1,42 @@
 import { set } from "mongoose";
 import { useState } from "react";
+import getGptResponse from "../functions/getGptResponse";
+import { useCollection } from "../hooks/useFirebase";
+import { useRouter } from "next/navigation";
+import circles from "public/three-dots.svg";
+import Image from "next/image";
 
 export default function CreateNewLesson() {
-  const submit = function () {};
+  const { add } = useCollection("lessons");
   const [promptText, setPromptText] = useState("Teach me about");
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const submit = async function () {
+    if (!promptText) {
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const response = await getGptResponse(
+        "lessonFromPrompt",
+        [{ role: "user", content: promptText }],
+        "json"
+      );
+
+      const title = response[0]?.title;
+      response.shift();
+
+      const { id } = await add({ title, pages: response });
+      router.push(`/dashboard/learn/?lessonId=${id}`);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   const [userStartedTyping, setUserStartedTyping] = useState(false);
 
   const handleInputChange = (e) => {
@@ -30,9 +63,19 @@ export default function CreateNewLesson() {
         ></textarea>
         <button
           onClick={submit}
+          disabled={isLoading}
           className="w-full py-2 px-4 bg-green-600 text-white rounded-md hover:bg-green-700 duration-150"
         >
-          Create
+          {isLoading ? (
+            <div className="flex">
+              <span className="mx-auto flex items-center gap-2">
+                <p>Loading</p>
+                <Image src={circles} className="h-5 w-5" />
+              </span>
+            </div>
+          ) : (
+            "Create"
+          )}
         </button>
       </div>
     </>
