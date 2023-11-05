@@ -38,7 +38,7 @@ export default function Lesson({ lesson, key }) {
                 }
                 className="text-sm px-4 py-1 border rounded-md text-gray-500 hover:bg-green-50 hover:text-green-600 hover:border-green-600 duration-200"
               >
-                Start
+                {lesson?.completed ? "Start" : "Continue"}
               </button>
             </div>
           </div>

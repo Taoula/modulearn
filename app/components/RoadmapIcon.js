@@ -13,53 +13,48 @@ export default function RoadmapIcon({ lesson, index, data, updateRoadmap }) {
   const [loading, setLoading] = useState("");
   const [complete, setComplete] = useState(null);
 
-  function isComplete(){
-    if (userData?.lessons){
-      const {lessons} = userData;
-      for (let i = 0; i < lessons.length; i++){
-        if (lessons[i].id == lesson.id){
-          console.log(lessons[i], "COMPLETED :)")
+  function isComplete() {
+    if (userData?.lessons) {
+      const { lessons } = userData;
+      for (let i = 0; i < lessons.length; i++) {
+        if (lessons[i].id == lesson.id) {
+          console.log(lessons[i], "COMPLETED :)");
           return lessons[i].completed;
-          
         }
       }
     }
-    console.log( "NOT COMPLETED :(")
+    console.log("NOT COMPLETED :(");
     return false;
   }
 
-  useEffect(()=> {
-    setComplete(()=>isComplete());
-  }, [userData, lesson])
+  useEffect(() => {
+    setComplete(() => isComplete());
+  }, [userData, lesson]);
 
   function getColors(type) {
-    if (type == "bg"){
-        if (!lesson?.id) {
-            return { backgroundColor: "#ebebeb" };
-          } else if (complete) {
-            return { backgroundColor: "#8affa9" };
-          } else {
-            
-            return { backgroundColor: "#6190ff" };
-          }
+    if (type == "bg") {
+      if (!lesson?.id) {
+        return { backgroundColor: "#ebebeb" };
+      } else if (complete) {
+        return { backgroundColor: "#8affa9" };
+      } else {
+        return { backgroundColor: "#6190ff" };
+      }
     } else {
-        if (!lesson?.id){
-            return {color: "#a3a2a2"}
-        } else if (complete){
-            
-            return {color: "#43a842"};
-        } else {
-          return {color: "#1c45a6"};
-        }
+      if (!lesson?.id) {
+        return { color: "#a3a2a2" };
+      } else if (complete) {
+        return { color: "#43a842" };
+      } else {
+        return { color: "#1c45a6" };
+      }
     }
-  
   }
 
   const generateLesson = async function () {
-    
     if (lesson?.id) {
       router.push(`/dashboard/learn/?lessonId=${lesson.id}`);
-    } else if (!loading){
+    } else if (!loading) {
       try {
         setLoading(true);
         const response = await getGptResponse(
@@ -83,7 +78,6 @@ export default function RoadmapIcon({ lesson, index, data, updateRoadmap }) {
           }
         }
 
-
         await updateRoadmap({ lessons: tempLessons });
         let lessons = userData?.lessons || [];
         lessons.push({ id, completed: false, progress: 0 });
@@ -98,7 +92,7 @@ export default function RoadmapIcon({ lesson, index, data, updateRoadmap }) {
   };
 
   return (
-<>
+    <>
       <li
         onClick={generateLesson}
         className={`relative flex w-full items-center ${
@@ -114,12 +108,20 @@ export default function RoadmapIcon({ lesson, index, data, updateRoadmap }) {
           </div>
 
           <span
-            style={...getColors("bg")}
-            className="hover:scale-110 duration-200 hover:cursor-pointer flex items-center justify-center w-10 h-10 rounded-full lg:h-10 lg:w-10 shrink-0 group"
+            // style={...getColors("bg")}
+            className={`hover:scale-110 duration-200 hover:cursor-pointer flex items-center justify-center w-10 h-10 rounded-full lg:h-10 lg:w-10 shrink-0 group ${
+              !lesson?.id
+                ? "bg-gray-100"
+                : complete
+                ? "bg-blue-50"
+                : "bg-green-600"
+            }`}
           >
             <svg
-            style={...getColors("color")}
-              className="w-3.5 h-3.5  lg:w-4 lg:h-4"
+              // style={...getColors("color")}
+              className={`w-3.5 h-3.5  lg:w-4 lg:h-4 ${
+                !lesson?.id ? "" : complete ? "text-blue-600" : "text-white"
+              }`}
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -135,15 +137,15 @@ export default function RoadmapIcon({ lesson, index, data, updateRoadmap }) {
             </svg>
           </span>
         </div>
-              {loading && (
-        <div className="flex text-black">
-          <span className="mx-auto flex items-center gap-2">
-            <p>Loading</p>
-            <Image src={circles} className="h-5 w-5" />
-          </span>
-        </div>
-      )}
+        {loading && (
+          <div className="flex text-black">
+            <span className="mx-auto flex items-center gap-2">
+              <p>Loading</p>
+              <Image src={circles} className="h-5 w-5" />
+            </span>
+          </div>
+        )}
       </li>
-
-    </>)
+    </>
+  );
 }
