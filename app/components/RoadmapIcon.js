@@ -82,11 +82,12 @@ export default function RoadmapIcon({ lesson, index, data, updateRoadmap }) {
         }`}
       >
         {/* Tooltip */}
-        <div className="group">
-          <div className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition duration-200 pointer-events-none p-2 w-36 rounded-md shadow-lg bg-white border border-gray-200 text-sm">
+        <div className="group text-center relative">
+          {" "}
+          {/* Added relative to the parent */}
+          <div className="inline whitespace-nowrap absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition duration-200 pointer-events-none p-2 rounded-md shadow-lg bg-white border border-gray-200 text-sm">
             {lesson?.title}
           </div>
-
           <span
             className={`hover:scale-110 duration-200 hover:cursor-pointer flex items-center justify-center w-10 h-10 rounded-full lg:h-10 lg:w-10 shrink-0 group ${
               loading
@@ -94,7 +95,7 @@ export default function RoadmapIcon({ lesson, index, data, updateRoadmap }) {
                 : !lesson?.id
                 ? "bg-gray-100"
                 : complete
-                ? "bg-blue-600" // Changed this from "bg-blue-50" to "bg-blue-600" for better contrast with the checkmark
+                ? "bg-blue-600"
                 : "bg-green-600"
             }`}
           >
