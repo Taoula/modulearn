@@ -15,7 +15,7 @@ export default function Page() {
     <div className="mt-12">
       <ul
         role="list"
-        className="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3"
+        className="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-2"
       >
         {userData &&
           userData?.lessons?.map((lesson) => {
