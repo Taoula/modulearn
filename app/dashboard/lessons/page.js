@@ -1,29 +1,25 @@
 "use client";
 
 import Lesson from "@/app/components/Lesson";
-import { useCollection } from "@/app/hooks/useFirebase";
+import { useCollection, useDoc } from "@/app/hooks/useFirebase";
 import { useEffect } from "react";
 
 export default function Page() {
-  const { data } = useCollection("lessons");
+  const { data: userData } = useDoc("");
 
   function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
   }
-
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
-
+  console.log(userData);
   return (
     <div className="mt-12">
       <ul
         role="list"
         className="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3"
       >
-        {data &&
-          data.map((lesson) => {
-            return <Lesson lessonData={lesson} key={lesson.id} />;
+        {userData &&
+          userData?.lessons?.map((lesson) => {
+            return <Lesson lesson={lesson} key={lesson.id} />;
           })}
       </ul>
     </div>

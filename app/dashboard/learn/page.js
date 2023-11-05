@@ -3,18 +3,44 @@
 import LessonPage from "@/app/components/LessonPage";
 import { useDoc } from "@/app/hooks/useFirebase";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Page() {
   const searchParams = useSearchParams();
   const lessonId = searchParams.get("lessonId");
-  const { data } = useDoc(`lessons/${lessonId}`);
+  const { data } = useDoc(`/lessons/${lessonId}`);
+  const { data: userData, update: updateUser } = useDoc("");
   const [index, setIndex] = useState(0);
+  const router = useRouter();
+
+  const complete = function () {
+    if (userData && data) {
+      let tempLessons = userData?.lessons;
+      for (let i = 0; i < tempLessons.length; i++) {
+        if (tempLessons[i].id == lessonId) {
+          tempLessons[i].progress = index;
+          tempLessons[i].completed = true;
+          break;
+        }
+      }
+      updateUser({ lessons: tempLessons });
+      router.push("/dashboard/lessons");
+    }
+  };
 
   useEffect(() => {
-    console.log(data);
-  }, [data]);
+    if (userData && data) {
+      let tempLessons = userData?.lessons;
+      for (let i = 0; i < tempLessons.length; i++) {
+        if (tempLessons[i].id == data.id) {
+          tempLessons[i].progress = index;
+          break;
+        }
+      }
+      updateUser({ lessons: tempLessons });
+    }
+  }, [index]);
 
   return (
     <>
@@ -39,7 +65,7 @@ export default function Page() {
             </svg>
           )}
           {data && <LessonPage pageData={data?.pages[index]} />}
-          {index != data?.pages?.length - 1 && (
+          {index != data?.pages?.length - 1 ? (
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -55,6 +81,13 @@ export default function Page() {
                 d="M12.75 15l3-3m0 0l-3-3m3 3h-7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
               />
             </svg>
+          ) : (
+            <button
+              onClick={complete}
+              className="text-yellow-500 bg-red-600 p-5 rounded-full text-lg font-bold tracking-widest"
+            >
+              COMPLETE LESSON
+            </button>
           )}
         </div>
       </div>

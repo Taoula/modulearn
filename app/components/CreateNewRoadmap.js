@@ -1,20 +1,27 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { useCollection } from "../hooks/useFirebase";
+import { useAuth, useCollection, useDoc } from "../hooks/useFirebase";
 import getGptResponse from "../functions/getGptResponse";
 import Image from "next/image";
 import circles from "public/three-dots.svg";
 
 export default function CreateNewRoadmap() {
-  const { add: addRoadmap } = useCollection("roadmaps");
+  const { add: addRoadmap } = useCollection("/roadmaps");
   const [promptText, setPromptText] = useState("");
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const { user } = useAuth();
+  const { data: userData, update: updateUser } = useDoc("");
 
   const submit = async function () {
-    if (!promptText) {
+    if (!promptText || !user || !userData) {
+      console.log(promptText, user, userData);
       return;
     }
+
+    console.log("every thing in place");
+
+    const { uid } = user;
 
     setIsLoading(true);
 
@@ -28,9 +35,13 @@ export default function CreateNewRoadmap() {
       const title = response?.title;
       const lessons = response?.lessons;
 
-      const { id } = await addRoadmap({ title, lessons });
+      const { id } = await addRoadmap({ title, lessons, uid });
 
       router.push(`/dashboard/roadmaps/?roadmapId=${id}`);
+
+      let roadmaps = userData?.roadmaps || [];
+      roadmaps.push({ id, completed: false, progress: 0 });
+      await updateUser({ roadmaps });
     } catch (error) {
       console.error(error);
     } finally {
