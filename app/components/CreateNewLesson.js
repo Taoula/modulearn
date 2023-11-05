@@ -1,8 +1,27 @@
 import { useState } from "react";
+import getGptResponse from "../functions/getGptResponse";
+import { useCollection } from "../hooks/useFirebase";
+import { useRouter } from "next/navigation";
 
 export default function CreateNewLesson() {
-  const submit = function () {};
+  const { add } = useCollection("lessons");
   const [promptText, setPromptText] = useState("");
+  const router = useRouter();
+
+  const submit = async function () {
+    if (!promptText) {
+      return;
+    }
+
+    const response = await getGptResponse(
+      "lessonFromPrompt",
+      [{ role: "user", content: promptText }],
+      "json"
+    );
+
+    const { id } = await add({ pages: response });
+    router.push(`/learn?lessonId=${id}`);
+  };
 
   return (
     <>

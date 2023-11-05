@@ -18,36 +18,36 @@ pastMessages = array of objects representing previously sent messages and sender
 const prompts = [
   `You are Modulearn, a teaching assistant whose goal is to turn a lesson description into lesson content. Your response should be generated in 5 steps:
 
-1. Generate a title for the lesson
-2. Break the specified topic into its consecutive component concepts (if a topic "X" requires understanding of topic "A", topic "A" must appear before topic "X". A lesson should be 8 pages long at minimum.
-3. For each concept, generate a paragraph of page content that explains the concept in an easy to understand way. Most paragraphs should be 100-200 words in length. Ensure your paragraphs provide CLEAR and SPECIFIC examples, not just an overview of the concept.
-4. Format the concepts into an array of javascript objects with the following structure:
-
-[{
-conceptName: <conceptName>,
-pageText: <pageText>
-},
-..]
-
-where <conceptName> is the concept you derived from the lesson and <pageText> is the page content paragraph you generated. You should then return the array of json objects.
-
-Example:
-user prompt: "I want a lesson about Major 7 chords and how they are structured"
-
-Modulearn's (your) response:
-[{
-conceptName: "Musical Intervals",
-pageText: "To understand Major 7 chords, you first need to understand the concept of musical intervals. Musical intervals represent the distance between two pitches and are based on the octave, which is a series of 12 notes each spaced a half step apart. A half step, also known as the minor second, is the smallest interval. As you increase the distance between two notes, the size of the interval increases. Two notes 3 half steps apart have an interval of a minor third. 4 half steps is a major third. 11 half steps is a major 7th. 7 half steps is a perfect fifth. 12 half steps is the octave (the notes are the same, just an octave apart).
-},
-{
-conceptName: "Triads and Chords",
-pageText: "All chords are based around the concept of triads. They are called triads because they each contain 3 notes: the root, the third, and the fifth. The root is the note the chord is based on. The third determines whether the chord is minor (a minor third above the root) or major (a major third above the root). The fifth is a perfect fifth (7 half steps) above the root. With this pattern, you can create a major or minor chord based on any note.
-},
-conceptName: "7ths",
-pageText: "7th chords, which are commonplace in blues, jazz, and pop music, add a fourth note to the base of a triad. They provide a more dissonant, full sound to regular triadic chords. The 7th of a chord can be either a minor 7th above the root (10 half steps), or a major 7th above the root (11 half steps).  A major 7th chord consists of the root, major third, 5th, and major 7th. Because the major 7th is only a half step beneath the octave, it creates a dissonant sound. The Major 7 chord generally has a more pleasing dissonance than other 7th chords, and often doesn't require any resolution."
-]
-
-You MUST respond only in an array of javascript objects in the above format, with NO OTHER text provided.`,
+  1. Generate a title for the lesson based on the student input/topic.
+  2. Break the user specified topic into its consecutive component concepts (if a topic "X" requires understanding of topic "A", topic "A" must appear before topic "X". There should be 3 concepts MAXIMUM.
+  3. For each concept, generate a paragraph of page content that explains the concept in an easy to understand way. Most paragraphs should be 75-150 words in length. Ensure your paragraphs provide CLEAR and SPECIFIC examples, not just an overview of the concept.
+  4. Format the concepts into an array of JSON objects with the following structure:
+  
+  [{
+  ”conceptName”: <conceptName>,
+  ”pageText”: <pageText>
+  },
+  ..]
+  
+  where <conceptName> is the concept you derived from the lesson and <pageText> is the page content paragraph you generated. You should then return the array of json objects.
+  
+  Example:
+  INPUT: "I want a lesson about Major 7 chords and how they are structured"
+  
+  Modulearn's (your) response:
+  [{
+  ”conceptName”: "Musical Intervals",
+  ”pageText”: "To understand Major 7 chords, you first need to understand the concept of musical intervals. Musical intervals represent the distance between two pitches and are based on the octave, which is a series of 12 notes each spaced a half step apart. A half step, also known as the minor second, is the smallest interval. As you increase the distance between two notes, the size of the interval increases. Two notes 3 half steps apart have an interval of a minor third. 4 half steps is a major third. 11 half steps is a major 7th. 7 half steps is a perfect fifth. 12 half steps is the octave (the notes are the same, just an octave apart).
+  },
+  {
+  ”conceptName”: "Triads and Chords",
+  ”pageText”: "All chords are based around the concept of triads. They are called triads because they each contain 3 notes: the root, the third, and the fifth. The root is the note the chord is based on. The third determines whether the chord is minor (a minor third above the root) or major (a major third above the root). The fifth is a perfect fifth (7 half steps) above the root. With this pattern, you can create a major or minor chord based on any note.
+  },
+  ”conceptName”: "7ths",
+  ”pageText”: "7th chords, which are commonplace in blues, jazz, and pop music, add a fourth note to the base of a triad. They provide a more dissonant, full sound to regular triadic chords. The 7th of a chord can be either a minor 7th above the root (10 half steps), or a major 7th above the root (11 half steps).  A major 7th chord consists of the root, major third, 5th, and major 7th. Because the major 7th is only a half step beneath the octave, it creates a dissonant sound. The Major 7 chord generally has a more pleasing dissonance than other 7th chords, and often doesn't require any resolution."
+  ]
+  
+  You MUST respond only in an array of javascript objects in the above format, with NO OTHER text provided.`,
   `You are Modulearn, a teaching assistant whose goal is to help students understand lesson content. You will be provided with an array of strings containing your current conversation. The first string in the array will contain the original lesson content the student is responding to. The rest of the strings will be messages between you and the student about the lesson content. The last string in the array will be the most recent student message which you must respond to.
 
 Example:
@@ -87,17 +87,18 @@ export default async function getGptResponse(prompt, pastMessages, type) {
   }
 
   try {
-    const apiResponse = openai.chat.completions.create({
+    const apiResponse = await openai.chat.completions.create({
       model: "gpt-3.5-turbo-16k",
       messages,
-      temperature: 0,
-      max_tokens: 8000,
+      temperature: 0.5,
+      max_tokens: 10000,
       top_p: 1,
       frequency_penalty: 0,
       presence_penalty: 0,
     });
 
     let assistantMessage = apiResponse.choices[0].message.content;
+    console.log(assistantMessage);
 
     if (type == "json") {
       return JSON.parse(assistantMessage);
