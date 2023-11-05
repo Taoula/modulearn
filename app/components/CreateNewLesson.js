@@ -1,3 +1,4 @@
+import { set } from "mongoose";
 import { useState } from "react";
 import getGptResponse from "../functions/getGptResponse";
 import { useCollection } from "../hooks/useFirebase";
@@ -7,7 +8,7 @@ import Image from "next/image";
 
 export default function CreateNewLesson() {
   const { add } = useCollection("lessons");
-  const [promptText, setPromptText] = useState("");
+  const [promptText, setPromptText] = useState("Teach me about");
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -36,7 +37,16 @@ export default function CreateNewLesson() {
       setIsLoading(false);
     }
   };
+  const [userStartedTyping, setUserStartedTyping] = useState(false);
 
+  const handleInputChange = (e) => {
+    let text = e.target.value;
+    if (text.slice(0, 14) != "Teach me about") {
+      setPromptText("Teach me about " + text.slice(14, text.length));
+    } else {
+      setPromptText(text);
+    }
+  };
   return (
     <>
       <div className="bg-white border shadow-lg rounded-lg px-8 py-8 flex flex-col justify-center items-center gap-3">
@@ -47,7 +57,8 @@ export default function CreateNewLesson() {
         </p>
         <textarea
           value={promptText}
-          onChange={(e) => setPromptText(e.target.value)}
+          placeholder="What do you want to learn about?"
+          onChange={handleInputChange}
           className="h-96 w-full m-3 border bg-slate-50 border-gray-300 rounded-md resize-none px-2 py-2"
         ></textarea>
         <button
