@@ -85,12 +85,17 @@ response: "There are many kinds of algorithms, including algorithms that sort an
 ];
 
 export default async function getGptResponse(prompt, pastMessages, type) {
+  let max_tokens;
+  let model = "gpt-3.5-turbo";
   if (prompt == "lessonFromPrompt") {
     prompt = prompts[0];
+    max_tokens = model == "gpt-3.5-turbo" ? 2000 : 8000;
   } else if (prompt == "lessonPageResponse") {
     prompt = prompts[1];
+    max_tokens = 2000;
   } else if (prompt == "roadmap") {
     prompt = prompts[2];
+    max_tokens = model == "gpt-3.5-turbo" ? 2000 : 8000;
   }
 
   //console.log(prompt);
@@ -115,10 +120,10 @@ export default async function getGptResponse(prompt, pastMessages, type) {
 
   try {
     const apiResponse = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo-16k",
+      model: model,
       messages,
       temperature: 0.5,
-      max_tokens: 10000,
+      max_tokens,
       top_p: 1,
       frequency_penalty: 0,
       presence_penalty: 0,

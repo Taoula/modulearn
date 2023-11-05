@@ -2,7 +2,9 @@
 
 import Chat from "@/app/components/Chat";
 import LessonPage from "@/app/components/LessonPage";
-import { useDoc } from "@/app/hooks/useFirebase";
+import Message from "@/app/components/Message";
+import getGptResponse from "@/app/functions/getGptResponse";
+import { useCollection, useDoc } from "@/app/hooks/useFirebase";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -14,6 +16,17 @@ export default function Page() {
   const { data: userData, update: updateUser } = useDoc("");
   const [index, setIndex] = useState(0);
   const router = useRouter();
+  const {
+    data: session,
+    update: updateSession,
+    loading: loadingSession,
+  } = useDoc(`sessions/${lessonId}/pages/${index}`);
+
+  useEffect(() => {
+    if (!loadingSession && session === null) {
+      updateSession({ messages: [] });
+    }
+  }, [loadingSession]);
 
   const complete = function () {
     if (userData && data) {
@@ -30,25 +43,41 @@ export default function Page() {
     }
   };
 
-  const [currentMessage, setCurrentMessage] = useState(""); // Current message being typed by the user
-
-  const [messages, setMessages] = useState([]); // Array of chat messages
-
-  useEffect(() => {
-    if (data?.pages && data?.pages.length > 0) {
-      setMessages([{ text: data.pages[0].pageText, source: "other" }]);
+  const handleSendMessage = async function () {
+    if (!session || !data || !currentMessage) {
+      console.log("BAD REQUEST");
+      return;
     }
-  }, [data]);
 
-  const handleSendMessage = () => {
-    if (currentMessage.trim()) {
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        { text: currentMessage, source: "user" },
-      ]);
-      setCurrentMessage("");
+    try {
+      console.log("test");
+      let tempMessages = session.messages;
+      tempMessages.push({ role: "user", content: currentMessage });
+      await updateSession({ messages: tempMessages }).then(async () => {
+        setCurrentMessage("");
+        const response = await getGptResponse(
+          "lessonPageResponse",
+          [{ role: "system", content: data.pages[index].pageText }].concat(
+            session.messages
+          ),
+          "text"
+        );
+        tempMessages = session.messages;
+        tempMessages.push({ role: "system", content: response });
+        await updateSession({ messages: tempMessages });
+      });
+    } catch (error) {
+      console.error(error);
     }
   };
+
+  const [currentMessage, setCurrentMessage] = useState(""); // Current message being typed by the user
+
+  // useEffect(() => {
+  //   if (data?.pages && data?.pages.length > 0) {
+  //     setMessages([{ text: data.pages[0].pageText, source: "other" }]);
+  //   }
+  // }, [data]);
 
   useEffect(() => {
     if (userData && data) {
@@ -93,6 +122,12 @@ export default function Page() {
             <>
               <div className="">
                 <LessonPage pageData={data?.pages[index]} />
+                <div className="flex flex-col gap-3 w-full">
+                  {session?.messages &&
+                    session?.messages.map((message) => {
+                      return <Message message={message} />;
+                    })}
+                </div>
                 <div className="flex gap-4 w-full">
                   <textarea
                     type="text"
