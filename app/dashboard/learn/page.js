@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 export default function Page() {
   const searchParams = useSearchParams();
   const lessonId = searchParams.get("lessonId");
+  const [isSystemTyping, setIsSystemTyping] = useState(false);
   const { data } = useDoc(`/lessons/${lessonId}`);
   const { data: userData, update: updateUser } = useDoc("");
   const [index, setIndex] = useState(0);
@@ -54,17 +55,24 @@ export default function Page() {
       let tempMessages = session.messages;
       tempMessages.push({ role: "user", content: currentMessage });
       await updateSession({ messages: tempMessages }).then(async () => {
+        setIsSystemTyping(true);
+
+        setTimeout(async () => {
+          const response = await getGptResponse(
+            "lessonPageResponse",
+            [{ role: "system", content: data.pages[index].pageText }].concat(
+              session.messages
+            ),
+            "text"
+          );
+          tempMessages = session.messages;
+          tempMessages.push({ role: "system", content: response });
+          await updateSession({ messages: tempMessages });
+
+          setIsSystemTyping(false);
+        }, 1500);
+
         setCurrentMessage("");
-        const response = await getGptResponse(
-          "lessonPageResponse",
-          [{ role: "system", content: data.pages[index].pageText }].concat(
-            session.messages
-          ),
-          "text"
-        );
-        tempMessages = session.messages;
-        tempMessages.push({ role: "system", content: response });
-        await updateSession({ messages: tempMessages });
       });
     } catch (error) {
       console.error(error);
@@ -118,11 +126,20 @@ export default function Page() {
               <div className="relative">
                 <div className="h-[40rem] overflow-scroll p-1 hide-scrollbar">
                   <LessonPage pageData={data?.pages[index]} />
+                  {/* <div className="flex flex-col gap-3 w-full">
+                    {session?.messages &&
+                      session?.messages.map((message) => {
+                        return <Message message={message} />;
+                      })}
+                  </div> */}
                   <div className="flex flex-col gap-3 w-full">
                     {session?.messages &&
                       session?.messages.map((message) => {
                         return <Message message={message} />;
                       })}
+                    {isSystemTyping && (
+                      <div className="animate-pulse">System is typing...</div>
+                    )}
                   </div>
                 </div>
                 <div className="absolute top-0 left-0 w-full h-10 bg-gradient-to-b from-white to-transparent"></div>
