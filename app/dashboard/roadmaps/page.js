@@ -6,10 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 export default function Page() {
-  const searchParams = useSearchParams();
-  const roadmapId = searchParams.get("roadmapId");
   const { data: userData } = useDoc("");
-  const [currentRoadmap, setCurrentRoadmap] = useState("");
 
   return (
     <>
