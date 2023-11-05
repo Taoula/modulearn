@@ -31,6 +31,7 @@ function ExplorePage() {
       <div>
         <InstantSearch searchClient={searchClient} indexName="ModulearnTitles">
           <SearchBox
+            resetIconComponent={() => {}}
             placeholder="Learn something new..."
             classNames={{
               root: "flex justify-center pb-10",
