@@ -92,7 +92,7 @@ export default function Page() {
         {data?.title}
       </h1>
       <div className="flex flex-col items-center gap-20 mt-12">
-        <div className="flex gap-12 items-center">
+        <div className="flex gap-20 items-center">
           <button
             onClick={() => setIndex((prev) => (prev > 0 ? prev - 1 : prev))}
             className="text-gray-500 bg-white border border-gray-500 px-4 py-1 rounded-full text-md font-semibold flex items-center gap-2 hover:bg-green-600 duration-200 hover:text-white"
@@ -115,15 +115,19 @@ export default function Page() {
           </button>
           {data && (
             <>
-              <div className="">
-                <LessonPage pageData={data?.pages[index]} />
-                <div className="flex flex-col gap-3 w-full">
-                  {session?.messages &&
-                    session?.messages.map((message) => {
-                      return <Message message={message} />;
-                    })}
+              <div className="relative">
+                <div className="h-[40rem] overflow-scroll p-1">
+                  <LessonPage pageData={data?.pages[index]} />
+                  <div className="flex flex-col gap-3 w-full">
+                    {session?.messages &&
+                      session?.messages.map((message) => {
+                        return <Message message={message} />;
+                      })}
+                  </div>
                 </div>
-                <div className="flex gap-4 w-full mt-12">
+                <div className="absolute top-0 left-0 w-full h-10 bg-gradient-to-b from-white to-transparent"></div>
+                {/* Top fade */}
+                <div className="flex gap-4 w-full mt-6">
                   <textarea
                     type="text"
                     value={currentMessage}
@@ -164,21 +168,6 @@ export default function Page() {
               </svg>
             </button>
           ) : (
-            // <svg
-            //   xmlns="http://www.w3.org/2000/svg"
-            //   fill="none"
-            //   viewBox="0 0 24 24"
-            //   strokeWidth={1.5}
-            //   stroke="currentColor"
-            //   className="w-10 h-10 hover:stroke-green-600 hover:fill-white duration-200"
-            //
-            // >
-            //   <path
-            //     strokeLinecap="round"
-            //     strokeLinejoin="round"
-            //     d="M12.75 15l3-3m0 0l-3-3m3 3h-7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-            //   />
-            // </svg>
             <button
               onClick={complete}
               className="text-green-600 bg-green-50 border border-green-600 px-4 py-1 rounded-full text-md font-semibold flex items-center gap-2 hover:bg-green-600 duration-200 hover:text-white"
