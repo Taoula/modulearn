@@ -1,8 +1,11 @@
-export default function RoadmapTracker() {
+export default function RoadmapTracker({ data }) {
+  /*
+    data?.lessons = [title: "LESSON TITLE", description (DON'T SHOW) "LESSON DESCRIPTION"]
+  */
   return (
     <div className="rounded-md border px-6 py-8">
       <div className="pb-8 flex justify-between items-center">
-        <h1 className="text-xl font-medium">Roadmap title</h1>
+        <h1 className="text-xl font-medium">{data?.title}</h1>
         <button className="border px-4 rounded-md py-1 text-gray-500 hover:bg-green-50 hover:text-green-600 hover:border-green-600 duration-200">
           Continue
         </button>
